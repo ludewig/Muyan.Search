@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>基于Lucene.NET的搜索工具实现</Description>
+    <Description>����Lucene.NET����������ʵ��</Description>
   </PropertyGroup>
 
   <ItemGroup>
