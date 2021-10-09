@@ -9,9 +9,9 @@ namespace Muyan.Search
 
     }
 
-    public interface ISearchResult<T> where T: ISearchResultItem
+    public interface ISearchResult<T>
     {
-        List<T> Items { get; set; }
+        IList<T> Items { get; set; }
         long Elapsed { get; set; }
         int TotalHits { get; set; }
     }

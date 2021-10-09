@@ -105,6 +105,13 @@ namespace Muyan.Search
         /// <param name="option"></param>
         /// <returns></returns>
         FacetSearchResult FacetSearch(FacetSearchOption option);
+
+        /// <summary>
+        /// 分组查询
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        GroupSearchResult GroupSearch(GroupSearchOption option);
     }
     public interface ISearchManager:ISearchManager<Analyzer,Directory,FSDirectory>
     {

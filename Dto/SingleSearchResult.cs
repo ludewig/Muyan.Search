@@ -9,7 +9,7 @@ namespace Muyan.Search
         /// <summary>
         /// 匹配结果
         /// </summary>
-        public List<SearchResultItem> Items { get; set; }
+        public IList<SearchResultItem> Items { get; set; }
         /// <summary>
         /// 检索耗时
         /// </summary>

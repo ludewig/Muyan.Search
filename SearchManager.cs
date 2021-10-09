@@ -25,6 +25,7 @@ using Lucene.Net.Search.Highlight;
 using Lucene.Net.Facet;
 using Lucene.Net.Facet.Taxonomy;
 using Lucene.Net.Facet.Taxonomy.Directory;
+using Lucene.Net.Search.Grouping;
 
 namespace Muyan.Search
 {
@@ -643,7 +644,40 @@ namespace Muyan.Search
                 }
             }
             return result;
-        } 
+        }
+        #endregion
+
+        #region 分组查询
+        /// <summary>
+        /// 分组查询
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        public GroupSearchResult GroupSearch(GroupSearchOption option)
+        {
+            GroupSearchResult result = new GroupSearchResult();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            using DirectoryReader reader=DirectoryReader.Open(Directory);
+            IndexSearcher searcher = new IndexSearcher(reader);
+            GroupingSearch groupingSearch = new GroupingSearch(option.Fields.FirstOrDefault());//指定要进行分组的索引
+            groupingSearch.SetGroupSort(new Sort(SortField.FIELD_SCORE));//设置分组排序规则
+            groupingSearch.SetCachingInMB(4.0, true);//设置缓存空间大小
+            groupingSearch.SetAllGroups(true);//设置是否为所有分组
+            groupingSearch.SetFillSortFields(true);//设置是否填充排序值
+            groupingSearch.SetGroupDocsLimit(option.MaxHits);//设置分组个数限制
+
+            QueryParser queryParser = new QueryParser(LuceneVersion.LUCENE_48, option.Fields.FirstOrDefault(), Analyzer);
+            string strQuery = "NOT 1900";
+            Query query = queryParser.Parse(strQuery);
+
+            var groups = groupingSearch.Search(searcher, query, 0, 1000);
+            var tmp = groups.Groups;
+
+            stopwatch.Stop();
+            result.Elapsed = stopwatch.ElapsedMilliseconds;
+            return result;
+        }
         #endregion
 
     }
