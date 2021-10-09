@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.Linq.Expressions;
 using JiebaNet.Segmenter;
+using JiebaNet.Segmenter.Common;
 using Lucene.Net.Queries;
 using Lucene.Net.Search.Highlight;
 using Lucene.Net.Facet;
@@ -244,6 +245,11 @@ namespace Muyan.Search
                         foreach (var attribute in attributes)
                         {
                             string name = string.IsNullOrEmpty(attribute.FieldName) ? fieldName : attribute.FieldName;
+
+                            if (propertyValue.IsNull()||string.IsNullOrEmpty(propertyValue.ToString()))
+                            {
+                                continue;
+                            }
 
                             switch (attribute.FieldType)
                             {

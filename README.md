@@ -4,7 +4,7 @@
 
 ## NuGet安装
 ```powershell
-PM> Install-Package DotNetCore.CAP
+PM> Install-Package Muyan.Search
 ```
 ## .NET Core项目配置
 
