@@ -3,7 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>����Lucene.NET����������ʵ��</Description>
+    <Description>基于Lucene.NET的通用工具包，支持.NET Core，包含通用的索引操作、检索查询、维度统计等，默认使用JieBa分词器。</Description>
+    <Version>1.1.0-beta1</Version>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/ludewig/Muyan.Search</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/ludewig/Muyan.Search</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +26,10 @@
     <None Remove="Resources\prob_emit.json" />
     <None Remove="Resources\prob_trans.json" />
     <None Remove="Resources\stopwords.txt" />
+    <None Include="C:\Users\pansh\Pictures\icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
