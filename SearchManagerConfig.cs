@@ -14,9 +14,10 @@ namespace Muyan.Search
         /// 维度索引存储路径
         /// </summary>
         public virtual string FacetPath { get; set; }
+
         /// <summary>
-        /// 停用词路径
+        /// 词典路径
         /// </summary>
-        public virtual string StopWords { get; set; }
+        public virtual string DictPath { get; set; }
     }
 }

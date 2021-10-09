@@ -13,7 +13,7 @@ namespace Muyan.Search
             services.AddSingleton(config);
             services.AddSingleton<Lucene.Net.Store.FSDirectory>(Lucene.Net.Store.FSDirectory.Open(config.FacetPath));
             services.AddSingleton<Lucene.Net.Store.Directory>(Lucene.Net.Store.FSDirectory.Open(config.DefaultPath));
-            services.AddSingleton<Lucene.Net.Analysis.Analyzer>(new JieBaAnalyzer(TokenizerMode.Search, config.StopWords));
+            services.AddSingleton<Lucene.Net.Analysis.Analyzer>(new JieBaAnalyzer(TokenizerMode.Search));
             services.AddTransient<ISearchManager, SearchManager>();
             return services;
         }

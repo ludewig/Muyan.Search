@@ -23,12 +23,12 @@ namespace Muyan.Search
         private readonly JiebaSegmenter _segmenter;
         private readonly TokenizerMode _mode;
 
-        public JieBaTokenizer(TextReader input, TokenizerMode mode,string stopUrl= "./Resources/stopwords.txt")
+        public JieBaTokenizer(TextReader input, TokenizerMode mode)
             : base(AttributeFactory.DEFAULT_ATTRIBUTE_FACTORY, input)
         {
             _segmenter = new JiebaSegmenter();
             _mode = mode;
-            LoadStopWords(stopUrl);
+            //LoadStopWords(stopUrl);
             Init();
 
         }
@@ -123,10 +123,7 @@ namespace Muyan.Search
             _wordList.Clear();//清除分词列表
             foreach (var token in tokens)
             {
-                if (!_stopWords.ContainsKey(token.Word))//移除停用词
-                {
-                    _wordList.Add(token);
-                }
+                _wordList.Add(token);
             }
             _iter = _wordList.GetEnumerator();
 
