@@ -13,8 +13,7 @@ PM> Install-Package Muyan.Search
   //全文检索配置
   "Search": {
     "DefaultPath": "Lucene/data",
-    "FacetPath": "Lucene/facet",
-    "StopWords": "Resources/stopwords.txt"
+    "FacetPath": "Lucene/facet"
   }
 ```
 ### Startup.cs
@@ -22,7 +21,27 @@ PM> Install-Package Muyan.Search
   services.AddSearchManager(new SearchManagerConfig()
   {
       DefaultPath = _appConfiguration["Search:DefaultPath"],
-      FacetPath = _appConfiguration["Search:FacetPath"],
-      StopWords = _appConfiguration["Search:StopWords"]
+      FacetPath = _appConfiguration["Search:FacetPath"]
   });
+```
+
+## 实体属性
+```csharp
+public class DataEntity:IEntity<string>
+{
+  [Index(FieldName="",FieldType=FieldDataType.Text,IsStore=Field.Store.YES)]
+  public string DataValue{get;set;}
+}
+```
+
+## 依赖注入
+```csharp
+public class DataContentManager : DomainService, IDataContentManager
+{
+    private readonly ISearchManager _searchManager;
+    public DataContentManager(ISearchManager searchManager)
+    {
+        _searchManager = searchManager;
+    }
+  }
 ```
