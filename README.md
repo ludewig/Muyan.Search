@@ -1,6 +1,6 @@
 # Muyan.Search
 
-基于Lucen.NET封装的工具库，支持.NET Core，包含通用的索引操作、检索查询、聚合统计等功能。
+基于Lucen.NET封装的工具库，支持.NET Core，包含通用的索引操作、检索查询、聚合统计等功能，默认使用JieBa分词器。
 
 ## NuGet安装
 ```powershell
