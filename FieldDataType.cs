@@ -57,6 +57,10 @@ namespace Muyan.Search
         /// <summary>
         /// 维度统计
         /// </summary>
-        Facet
+        Facet,
+        /// <summary>
+        /// 地理信息坐标
+        /// </summary>
+        Geo
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using Lucene.Net;
 using Lucene.Net.Analysis;
@@ -26,6 +27,13 @@ using Lucene.Net.Facet;
 using Lucene.Net.Facet.Taxonomy;
 using Lucene.Net.Facet.Taxonomy.Directory;
 using Lucene.Net.Search.Grouping;
+using Lucene.Net.Spatial;
+using Lucene.Net.Spatial.Prefix;
+using Lucene.Net.Spatial.Prefix.Tree;
+using Lucene.Net.Spatial.Queries;
+using Spatial4n.Core.Context;
+using Spatial4n.Core.Distance;
+using Spatial4n.Core.Shapes;
 
 namespace Muyan.Search
 {
@@ -49,6 +57,9 @@ namespace Muyan.Search
         /// </summary>
         public virtual TTaxoDirectory TaxoDirectory { get;  }
 
+        private SpatialContext _spatialContext;
+        private SpatialStrategy _spatialStrategy;
+
         public SearchManager(TDirectory directory, TAnalyzer analyzer,TTaxoDirectory taxoDirectory)
         {
             Directory = directory;
@@ -58,6 +69,9 @@ namespace Muyan.Search
             //一个IndexWriterConfig实例只能供一个IndexWriter实例使用，因此不能将IndexWriterConfig作为局部公共变量使用，所以下方代码错误。
             //IndexConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, analyzer);
 
+            _spatialContext=SpatialContext.GEO;
+            SpatialPrefixTree grid = new GeohashPrefixTree(_spatialContext, CoreConstant.DefaultGeoMaxLevels);
+            _spatialStrategy = new RecursivePrefixTreeStrategy(grid, CoreConstant.DefaultGeoField);
         }
 
         #region 创建索引
@@ -293,6 +307,10 @@ namespace Muyan.Search
                                     break;
                                 case FieldDataType.Facet:
                                     doc.Add(new FacetField(fieldName, propertyValue.ToString()));
+                                    break;
+                                case FieldDataType.Geo:
+                                    IPoint point = (IPoint) propertyValue;
+                                    doc.Add(new StoredField(_spatialStrategy.FieldName,point.X.ToString(CultureInfo.InvariantCulture)+" "+point.Y.ToString(CultureInfo.InvariantCulture)));
                                     break;
                                 default:
                                     doc.Add(new StringField(fieldName, propertyValue.ToString(), attribute.IsStore));
@@ -661,21 +679,54 @@ namespace Muyan.Search
             using DirectoryReader reader=DirectoryReader.Open(Directory);
             IndexSearcher searcher = new IndexSearcher(reader);
             GroupingSearch groupingSearch = new GroupingSearch(option.Fields.FirstOrDefault());//指定要进行分组的索引
-            groupingSearch.SetGroupSort(new Sort(SortField.FIELD_SCORE));//设置分组排序规则
+            //groupingSearch.SetGroupSort(new Sort(SortField.FIELD_SCORE));//设置分组排序规则
             groupingSearch.SetCachingInMB(4.0, true);//设置缓存空间大小
             groupingSearch.SetAllGroups(true);//设置是否为所有分组
             groupingSearch.SetFillSortFields(true);//设置是否填充排序值
-            groupingSearch.SetGroupDocsLimit(option.MaxHits);//设置分组个数限制
+            //groupingSearch.SetGroupDocsLimit(option.MaxHits);//设置分组文档个数限制
 
             QueryParser queryParser = new QueryParser(LuceneVersion.LUCENE_48, option.Fields.FirstOrDefault(), Analyzer);
-            string strQuery = "NOT 1900";
-            Query query = queryParser.Parse(strQuery);
+            Query query = new MatchAllDocsQuery();
 
-            var groups = groupingSearch.Search(searcher, query, 0, 1000);
+            var groups = groupingSearch.Search(searcher, query,0,option.MaxHits);
             var tmp = groups.Groups;
 
             stopwatch.Stop();
             result.Elapsed = stopwatch.ElapsedMilliseconds;
+            return result;
+        }
+
+
+        #endregion
+
+        #region 地理信息查询
+        /// <summary>
+        /// 地理信息查询
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        public GeoSearchResult GeoSearch(GeoSearchOption option)
+        {
+            GeoSearchResult result = new GeoSearchResult();
+            Stopwatch watch = Stopwatch.StartNew();
+            using (Lucene.Net.Index.DirectoryReader reader = DirectoryReader.Open(Directory))
+            {
+                //实例化索引检索器
+                IndexSearcher searcher = new IndexSearcher(reader);
+                SpatialArgs args = new SpatialArgs(SpatialOperation.Intersects,
+                    _spatialContext.MakeCircle(option.Origin,
+                        DistanceUtils.Dist2Degrees(option.Raidus, DistanceUtils.EARTH_EQUATORIAL_RADIUS_KM)));
+                Filter filter = _spatialStrategy.MakeFilter(args);
+                Query query = new MatchAllDocsQuery();
+                TopDocs topDocs = searcher.Search(query, filter, option.MaxHits);
+                foreach (var socreDoc in topDocs.ScoreDocs)
+                {
+                    Document doc = searcher.Doc(socreDoc.Doc);
+                    result.Items.Add(doc,socreDoc.Score);
+                }
+            }
+            watch.Stop();
+            result.Elapsed = watch.ElapsedMilliseconds;
             return result;
         }
         #endregion

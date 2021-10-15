@@ -112,6 +112,13 @@ namespace Muyan.Search
         /// <param name="option"></param>
         /// <returns></returns>
         GroupSearchResult GroupSearch(GroupSearchOption option);
+
+        /// <summary>
+        /// 地理信息查询
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        GeoSearchResult GeoSearch(GeoSearchOption option);
     }
     public interface ISearchManager:ISearchManager<Analyzer,Directory,FSDirectory>
     {

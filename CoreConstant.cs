@@ -8,5 +8,8 @@ namespace Muyan.Search
     {
         public const string EntityType = "EntityType";
         public const string EntityId = "EntityId";
+
+        public const int DefaultGeoMaxLevels = 11;
+        public const string DefaultGeoField = "DefaultGeoField";
     }
 }
