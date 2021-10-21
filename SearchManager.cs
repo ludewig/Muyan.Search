@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using Lucene.Net;
 using Lucene.Net.Analysis;
@@ -729,6 +730,35 @@ namespace Muyan.Search
             result.Elapsed = watch.ElapsedMilliseconds;
             return result;
         }
+
+
+        #endregion
+
+        #region 获取索引基本信息
+        /// <summary>
+        /// 获取索引基本信息
+        /// </summary>
+        /// <returns></returns>
+        public IndexInfo Info()
+        {
+            IndexInfo info = new IndexInfo();
+            using (Lucene.Net.Index.DirectoryReader reader = DirectoryReader.Open(Directory))
+            {
+                ICollection<string> fields = MultiFields.GetIndexedFields(reader);
+                FSDirectory fsdDirectory=reader.Directory as FSDirectory;
+                System.IO.DirectoryInfo directoryInfo = new DirectoryInfo(((FSDirectory)reader.Directory).ToString());
+                string[] files=reader.Directory.ListAll();
+
+                info.IndexPath = fsdDirectory==null?"":fsdDirectory.Directory.FullName;
+                info.FileNum = files.Length;
+                info.DocumentNum = reader.NumDocs;
+                info.FieldNum = fields.Count;
+                info.TermNum = 0;
+                info.UpdateTime=DateTime.Now;
+                info.Version = reader.Version;
+            }
+            return info;
+        } 
         #endregion
 
     }

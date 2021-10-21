@@ -119,6 +119,12 @@ namespace Muyan.Search
         /// <param name="option"></param>
         /// <returns></returns>
         GeoSearchResult GeoSearch(GeoSearchOption option);
+
+        /// <summary>
+        /// 索引基本信息
+        /// </summary>
+        /// <returns></returns>
+        IndexInfo Info();
     }
     public interface ISearchManager:ISearchManager<Analyzer,Directory,FSDirectory>
     {
