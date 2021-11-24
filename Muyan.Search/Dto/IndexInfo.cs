@@ -39,7 +39,7 @@ namespace Muyan.Search
             set { documentNum = value; }
         }
 
-        private int fieldNum;
+        private int fieldNum=0;
         /// <summary>
         /// Field索引项数量
         /// </summary>
@@ -49,11 +49,11 @@ namespace Muyan.Search
             set { fieldNum = value; }
         }
 
-        private int termNum;
+        private long termNum=0;
         /// <summary>
         /// Term词项数量
         /// </summary>
-        public int TermNum
+        public long TermNum
         {
             get { return termNum; }
             set { termNum = value; }

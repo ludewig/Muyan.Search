@@ -71,11 +71,11 @@
 
   <ItemGroup>
     <PackageReference Include="jieba.NET" Version="0.42.2" />
-    <PackageReference Include="Lucene.Net.Facet" Version="4.8.0-beta00014" />
-    <PackageReference Include="Lucene.Net.Grouping" Version="4.8.0-beta00014" />
-    <PackageReference Include="Lucene.Net.Highlighter" Version="4.8.0-beta00014" />
-    <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00014" />
-    <PackageReference Include="Lucene.Net.Spatial" Version="4.8.0-beta00014" />
+    <PackageReference Include="Lucene.Net.Facet" Version="4.8.0-beta00015" />
+    <PackageReference Include="Lucene.Net.Grouping" Version="4.8.0-beta00015" />
+    <PackageReference Include="Lucene.Net.Highlighter" Version="4.8.0-beta00015" />
+    <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00015" />
+    <PackageReference Include="Lucene.Net.Spatial" Version="4.8.0-beta00015" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
   </ItemGroup>
 

@@ -10,6 +10,6 @@ namespace Muyan.Search
         public const string EntityId = "EntityId";
 
         public const int DefaultGeoMaxLevels = 11;
-        public const string DefaultGeoField = "DefaultGeoField";
+        public const string DefaultGeoField = "GeoLocation";
     }
 }

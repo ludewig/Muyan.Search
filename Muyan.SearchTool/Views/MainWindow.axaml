@@ -1,0 +1,58 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Muyan.SearchTool.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Muyan.SearchTool.Views.MainWindow"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        TransparencyLevelHint="AcrylicBlur"
+        ExtendClientAreaToDecorationsHint="True"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Muyan.SearchTool">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial BackgroundSource="Digger" TintColor="DarkCyan" TintOpacity="1" MaterialOpacity="0.7"></ExperimentalAcrylicMaterial>
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+
+        <!--<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>-->
+        <TabControl TabStripPlacement="Left" Margin="10,30,10,10">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel>
+                        <PathIcon Data="{StaticResource gallery_regular}"></PathIcon>
+                        <TextBlock Text="索引" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18"></TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <Border BorderThickness="1" BorderBrush="#999999" Margin="10"></Border>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel>
+                        <PathIcon Data="{StaticResource earth_regular}"></PathIcon>
+                        <TextBlock Text="数据" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18"></TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <Border BorderThickness="1" BorderBrush="#999999" Margin="10"></Border>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel>
+                        <PathIcon Data="{StaticResource data_area_regular}"></PathIcon>
+                        <TextBlock Text="统计" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18"></TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <Border BorderThickness="1" BorderBrush="#999999" Margin="10"></Border>
+            </TabItem>
+        </TabControl>
+    </Panel>
+</Window>

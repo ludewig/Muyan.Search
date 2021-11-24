@@ -745,16 +745,18 @@ namespace Muyan.Search
             using (Lucene.Net.Index.DirectoryReader reader = DirectoryReader.Open(Directory))
             {
                 ICollection<string> fields = MultiFields.GetIndexedFields(reader);
-                FSDirectory fsdDirectory=reader.Directory as FSDirectory;
-                System.IO.DirectoryInfo directoryInfo = new DirectoryInfo(((FSDirectory)reader.Directory).ToString());
-                string[] files=reader.Directory.ListAll();
-
-                info.IndexPath = fsdDirectory==null?"":fsdDirectory.Directory.FullName;
+                FSDirectory fsdDirectory=(FSDirectory)reader.Directory;
+                DirectoryInfo directoryInfo = fsdDirectory.Directory;
+                FileInfo[] files = directoryInfo.GetFiles();
+                info.IndexPath = directoryInfo.FullName;
                 info.FileNum = files.Length;
                 info.DocumentNum = reader.NumDocs;
                 info.FieldNum = fields.Count;
-                info.TermNum = 0;
-                info.UpdateTime=DateTime.Now;
+                foreach (var field in fields)
+                {
+                    info.TermNum += reader.GetSumTotalTermFreq(field);
+                }
+                info.UpdateTime=directoryInfo.LastWriteTime;
                 info.Version = reader.Version;
             }
             return info;
